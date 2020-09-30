@@ -4,23 +4,32 @@ const DISCARD_PREV = '--discard-prev'
 const DOUBLE_NEXT = '--double-next'
 const DOUBLE_PREV = '--double-prev'
 module.exports = function transform(array) {
-    let controlArray = ["--discard-next", "--discard-prev", "--double-next", "--double-prev"]
     if (!Array.isArray(array)) throw Error;
     let newArray = array.slice();
     newArray.forEach(function (item, i) {
-        if (Object.is(item, DISCARD_NEXT) && i < newArray.length - 1) {
-            newArray[i + 1] = DISCARD_PREV;
-        }
-        if (Object.is(item, DISCARD_PREV) && i > 0) {
-            newArray[i - 1] = DISCARD_PREV;
-        }
-        if (Object.is(item, DOUBLE_NEXT) && i < newArray.length - 1 && controlArray.indexOf(newArray[i + 1]) === -1) {
-            newArray[i] = newArray[i + 1];
-        }
-        if (Object.is(item, DOUBLE_PREV) && i > 0 && controlArray.indexOf(newArray[i - 1]) === -1) {
-            newArray[i] = newArray[i - 1];
+        switch (item) {
+            case DISCARD_NEXT:{
+                newArray[i + 1] = DISCARD_PREV
+                break
+            }
+            case DISCARD_PREV:{
+                newArray[i - 1] = DISCARD_NEXT
+                break
+            }
+            case DOUBLE_NEXT:{
+                if (i < newArray.length - 1)
+                    newArray[i] = newArray[i + 1]
+                break
+            }
+            case DOUBLE_PREV:{
+                if (i > 0)
+                    newArray[i] = newArray[i - 1]
+                break
+            }
         }
     })
-    return newArray.filter(value => controlArray.indexOf(value) === -1);
+    return newArray.filter(value => {
+        return value !== DOUBLE_NEXT && value !== DOUBLE_PREV && value !== DISCARD_PREV && value !== DISCARD_NEXT;
+    });
 };
 
