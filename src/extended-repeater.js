@@ -9,8 +9,6 @@ module.exports = function repeater(str, options) {
     if (str === undefined){
         throw new Error('not found str')
     }
-    // if (typeof str !== "string") str.toString()
-    // if (typeof options.addition !== "string") options.addition.toString()
     let builder = ''
     for (let i = 0; i < options.repeatTimes; i++) {
         builder += str
