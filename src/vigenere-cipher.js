@@ -8,14 +8,14 @@ class VigenereCipheringMachine {
     }
 
     encrypt(message, key) {
-        return this.extracted(message, key, true);
+        return this.extracted(message, key);
     }
 
     decrypt(message, key) {
         return this.extracted(message, key, false)
     }
 
-    extracted(message, key, mode) {
+    extracted(message, key, mode = true) {
         if (message === undefined || key === undefined) throw new Error("message or key und")
         message = message.toUpperCase();
         key = key.toUpperCase();
@@ -40,9 +40,9 @@ class VigenereCipheringMachine {
             }
         }
         let index = 0
-        for (let i = 0; i < arr.length; i++) {
+        for (let item of arr) {
             str.splice(index, 0, ' ')
-            index = index + arr[i].length + 1
+            index += item.length + 1
         }
         str = str.join('').trim()
         return this.boolean ? str : str.split("").reverse().join("")
